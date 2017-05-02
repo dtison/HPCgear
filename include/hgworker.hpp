@@ -32,7 +32,7 @@
 #include <zmq.hpp>
 
 //  Gravity Neutral Launch/Task Parameters
-#include <gnlaunch.hpp>
+#include "hglaunch.hpp"
 
 
 /**
@@ -59,18 +59,18 @@ __inline__ __host__ CUDART_DEVICE cudaError_t getCudaOccupancyDetails(
 #endif
 
 /**
-*  GNWorker
+*  HgWorker
 *  Abstract base class for Gravity Connect workers
 */
 
-class GNWorker {
+class HgWorker {
 public:
-  //  GNWorker(const char * source_data, const char * host);
-    GNWorker(GNTaskParams & task_params);
-    virtual ~GNWorker();
+  //  HgWorker(const char * source_data, const char * host);
+    HgWorker(HgTaskParams & task_params);
+    virtual ~HgWorker();
     //  Waits for message from server / SSE that it's ready for messages from us
 protected:
-    //  Common elements for all GNWorkers
+    //  Common elements for all HgWorkers
     float elapsed_time;
     boost::property_tree::ptree pt_elapsed_time;
     // Generalized time
@@ -104,7 +104,7 @@ private:
 
 };
 
-GNWorker::GNWorker(GNTaskParams & task_params) : context(0), send_socket(0), send_socket2(0), port(""), use_zmq(true) {
+HgWorker::HgWorker(HgTaskParams & task_params) : context(0), send_socket(0), send_socket2(0), port(""), use_zmq(true) {
 
     //  Read some properties from the JSON data
     std::stringstream ss(task_params.get_source_data());
@@ -157,7 +157,7 @@ GNWorker::GNWorker(GNTaskParams & task_params) : context(0), send_socket(0), sen
 }
 
 
-GNWorker::~GNWorker() {
+HgWorker::~HgWorker() {
     std::cout << "GN Destructor" << std::endl;
     if (send_socket) {
         delete send_socket;
@@ -172,7 +172,7 @@ GNWorker::~GNWorker() {
 }
 
 //  Todo:  Return error if socket send fails?
-void GNWorker::SendPtree(boost::property_tree::ptree & ptree) {
+void HgWorker::SendPtree(boost::property_tree::ptree & ptree) {
     if (use_zmq) {
         // Convert to string
         std::ostringstream string_stream;
@@ -193,7 +193,7 @@ void GNWorker::SendPtree(boost::property_tree::ptree & ptree) {
 /**
  *  Job received successfully - Return JSON object
  */
-bool GNWorker::SendJobReceived(void) {
+bool HgWorker::SendJobReceived(void) {
     boost::property_tree::ptree ptree;
     ptree.put("type", "received");
     ptree.put("data", "Bogus data");
@@ -204,7 +204,7 @@ bool GNWorker::SendJobReceived(void) {
 /**
  *  Processing error occurred - Return JSON object
  */
-bool GNWorker::SendError(const std::string & error_message) {
+bool HgWorker::SendError(const std::string & error_message) {
 
     std::cout << "Calling SendError()  " << std::endl;
 
@@ -219,7 +219,7 @@ bool GNWorker::SendError(const std::string & error_message) {
 /**
  *  Percent complete - Return JSON object
  */
-bool GNWorker::SendPercentDone(float percent) {
+bool HgWorker::SendPercentDone(float percent) {
     percent = std::min (percent, 1.0f);
     boost::property_tree::ptree ptree;
     ptree.put("type", "progress");
@@ -231,7 +231,7 @@ bool GNWorker::SendPercentDone(float percent) {
 /**
  *  Final results as sent from worker - Return JSON object
  */
-bool GNWorker::SendResults(boost::property_tree::ptree & results_properties) {
+bool HgWorker::SendResults(boost::property_tree::ptree & results_properties) {
     boost::property_tree::ptree ptree;
     ptree.put("type", "finish");
     ptree.add_child("data", results_properties);
@@ -243,17 +243,17 @@ bool GNWorker::SendResults(boost::property_tree::ptree & results_properties) {
 
 /**
 *
-*  gravityConnect: Callable glue between Modules that inherit from GNWorker class <--> Gearman C API
+*  gravityConnect: Callable glue between Modules that inherit from HgWorker class <--> Gearman C API
 */
-template<class Worker> bool gravityConnect (GNTaskParams & task_params) {
+template<class Worker> bool gravityConnect (HgTaskParams & task_params) {
 
     //  TODO:  How are we using source_len?  Is it needed?
     //  For JSON / property trees
     boost::property_tree::ptree results_properties;
 
     try {
-        Worker gnWorker(task_params);
-        gnWorker(results_properties);
+        Worker HgWorker(task_params);
+        HgWorker(results_properties);
     }
     catch(std::exception &e) {
         std::cout << e.what() << std::endl;

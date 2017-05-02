@@ -18,7 +18,7 @@
 
 #include <libgearman/gearman.h>
 #include <boost/program_options.hpp>
-#include <gnlaunch.hpp>
+#include <hglaunch.hpp>
 
 using namespace std;
 using namespace boost::program_options;
@@ -72,9 +72,9 @@ static gearman_return_t gear_worker (gearman_job_st * job, void * context) {
     cout << "Workload is " << source_string << " Job handle " << job_handle << endl;*/
 
     ostringstream results_stream;
-//    gravityLaunch (&source_string[0], workload_size, &job_handle[0], results_stream);
- //   gravityLaunch (&source_string[0], workload_size, &options->host[0], results_stream);
-    GNTaskParams task_params (workload_string.c_str(), workload_size, gearman_job_handle(job), options.host.c_str(),
+//    HPCgearLaunch (&source_string[0], workload_size, &job_handle[0], results_stream);
+ //   HPCgearLaunch (&source_string[0], workload_size, &options->host[0], results_stream);
+    HgTaskParams task_params (workload_string.c_str(), workload_size, gearman_job_handle(job), options.host.c_str(),
                               &results_stream);
 /*
     task_params.source_data     = workload;
@@ -83,7 +83,7 @@ static gearman_return_t gear_worker (gearman_job_st * job, void * context) {
     task_params.host            = options->host.c_str();
     task_params.results_stream  = results_stream;*/
 
-    gravityLaunch (task_params);
+    HPCgearLaunch (task_params);
 
 
     if (options.status) {

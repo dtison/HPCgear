@@ -15,7 +15,7 @@
 #include <signal.h>
 
 #include <boost/program_options.hpp>
-#include <gnlaunch.hpp>
+#include <hglaunch.hpp>
 
 
 // Why type std:: everywhere?
@@ -81,14 +81,14 @@ int main(int args, char *argv[]) {
 
     string job_handle = "cli_task";
     ostringstream results_stream;
-/*    gravityLaunch(static_cast<const char *> (&source_data[0]), source_data.size(),
+/*    HPCgearLaunch(static_cast<const char *> (&source_data[0]), source_data.size(),
                   static_cast<const char *> (&job_handle[0]), results_stream);*/
 
 
-    GNTaskParams task_params (source_data.c_str(), source_data.length(), job_handle, std::string(""),
+    HgTaskParams task_params (source_data.c_str(), source_data.length(), job_handle, std::string(""),
                               &results_stream);
 
-    gravityLaunch (task_params);
+    HPCgearLaunch (task_params);
 
 
 

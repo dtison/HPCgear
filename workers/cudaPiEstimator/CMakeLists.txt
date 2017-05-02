@@ -20,6 +20,7 @@ MESSAGE(STATUS "CUDA_NVCC_FLAGS: " ${CUDA_NVCC_FLAGS})
 include_directories(
         ../../include
         $ENV{CUDA_HOME}/samples/common/inc
+ #       /usr/local/cuda/samples/common/inc
 )
 
 cuda_add_library(cudaPiEstimator SHARED cudaPiEstimator.cu)

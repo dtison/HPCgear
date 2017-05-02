@@ -3,7 +3,7 @@
 * Set up the local worker subclass
 */
 
-#include <gnworker.hpp>
+#include <hgworker.hpp>
 
 // Worker Interface - Pi num sims
 typedef struct {
@@ -12,9 +12,9 @@ typedef struct {
 } WORKER_VALUES;
 
 // Subclass
-class PiEstimatorWorker: public GNWorker {
+class PiEstimatorWorker: public HgWorker {
 public:
-    PiEstimatorWorker(GNTaskParams & task_params);
+    PiEstimatorWorker(HgTaskParams & task_params);
     void operator()(boost::property_tree::ptree & results_properties);
 protected:
     WORKER_VALUES workerValues;

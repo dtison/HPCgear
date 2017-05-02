@@ -64,12 +64,12 @@ __global__ void piKernel(FLOAT *reduction_sums, FLOAT step, unsigned long num_si
 *
 */
 /*
-extern "C" bool gravityLaunch (const char * source_data, const unsigned int source_len,
+extern "C" bool HPCgearLaunch (const char * source_data, const unsigned int source_len,
                                const char * host, ostringstream & results_stream) {
     return gravityConnect<PiEstimatorWorker> (source_data, source_len, host, results_stream);
 }
 */
-extern "C" bool gravityLaunch (GNTaskParams & task_params) {
+extern "C" bool HPCgearLaunch (HgTaskParams & task_params) {
     return gravityConnect<PiEstimatorWorker> (task_params);
 }
 
@@ -77,11 +77,11 @@ extern "C" bool gravityLaunch (GNTaskParams & task_params) {
 
 /**
 *
-*  GNWorker Class implementation
+*  HgWorker Class implementation
 */
 
-//  Constructor - reads JSON input and sets default values for this GNWorker
-PiEstimatorWorker::PiEstimatorWorker (GNTaskParams & task_params) : GNWorker(task_params) {
+//  Constructor - reads JSON input and sets default values for this HgWorker
+PiEstimatorWorker::PiEstimatorWorker (HgTaskParams & task_params) : HgWorker(task_params) {
     /**
     *  Get JSON values passed in
     *  and init WORKER_VALUES struct

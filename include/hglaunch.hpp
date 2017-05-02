@@ -2,12 +2,12 @@
 // Created by David Ison on 5/25/15.
 //
 
-#ifndef GRAVITYNEUTRAL_GNLAUNCH_HPP
-#define GRAVITYNEUTRAL_GNLAUNCH_HPP
+#ifndef HG_LAUNCH_HPP
+#define HG_LAUNCH_HPP
 
-class GNTaskParams  {
+class HgTaskParams  {
 public:
-    GNTaskParams (const char * source_data, const unsigned int source_len, const std::string job_handle,
+    HgTaskParams (const char * source_data, const unsigned int source_len, const std::string job_handle,
             const std::string host, std::ostringstream * results_stream) :
             source_data(source_data), source_len(source_len), job_handle(job_handle),
             host(host) , results_stream(results_stream)  {};
@@ -41,8 +41,8 @@ public:
 
 
 //  Worker interface functions
-extern "C" bool gravityLaunch(GNTaskParams & task_params);
+extern "C" bool HPCgearLaunch(HgTaskParams & task_params);
 
 
 
-#endif //GRAVITYNEUTRAL_GNLAUNCH_HPP
+#endif
