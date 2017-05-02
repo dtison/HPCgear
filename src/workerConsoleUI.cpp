@@ -1,8 +1,9 @@
 /**
 *   workerConsoleUI.cpp -
 *
-*   Provides main() entry point and framework for testing GravityNeutral 
-*   workers
+*   main() entry point and framework for CLI testable HPCgear applications.
+ *   What this creates is a command line version of the gearman worker so you can
+ *   test proper operation of the computation.
 *
 */
 
@@ -89,10 +90,6 @@ int main(int args, char *argv[]) {
                               &results_stream);
 
     HPCgearLaunch (task_params);
-
-
-
-
 
 
     if (options.dump) {

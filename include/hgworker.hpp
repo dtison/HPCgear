@@ -31,7 +31,7 @@
 // ZeroMQ
 #include <zmq.hpp>
 
-//  Gravity Neutral Launch/Task Parameters
+//  HPCgear Launch/Task Parameters
 #include "hglaunch.hpp"
 
 
@@ -60,7 +60,7 @@ __inline__ __host__ CUDART_DEVICE cudaError_t getCudaOccupancyDetails(
 
 /**
 *  HgWorker
-*  Abstract base class for Gravity Connect workers
+*  Abstract base class for HPCgear Connect workers
 */
 
 class HgWorker {
@@ -243,9 +243,9 @@ bool HgWorker::SendResults(boost::property_tree::ptree & results_properties) {
 
 /**
 *
-*  gravityConnect: Callable glue between Modules that inherit from HgWorker class <--> Gearman C API
+*  HPCgearConnect: Callable glue between Modules that inherit from HgWorker class <--> Gearman C API
 */
-template<class Worker> bool gravityConnect (HgTaskParams & task_params) {
+template<class Worker> bool HPCgearConnect (HgTaskParams & task_params) {
 
     //  TODO:  How are we using source_len?  Is it needed?
     //  For JSON / property trees

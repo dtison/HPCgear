@@ -66,11 +66,11 @@ __global__ void piKernel(FLOAT *reduction_sums, FLOAT step, unsigned long num_si
 /*
 extern "C" bool HPCgearLaunch (const char * source_data, const unsigned int source_len,
                                const char * host, ostringstream & results_stream) {
-    return gravityConnect<PiEstimatorWorker> (source_data, source_len, host, results_stream);
+    return HPCgearConnect<PiEstimatorWorker> (source_data, source_len, host, results_stream);
 }
 */
 extern "C" bool HPCgearLaunch (HgTaskParams & task_params) {
-    return gravityConnect<PiEstimatorWorker> (task_params);
+    return HPCgearConnect<PiEstimatorWorker> (task_params);
 }
 
 
