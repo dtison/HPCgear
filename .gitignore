@@ -6,6 +6,7 @@
 *.cubin
 *.fatbin
 
+TODO.txt
 
 .idea
 .DS_Store
