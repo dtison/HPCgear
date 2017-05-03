@@ -63,9 +63,6 @@ Contributions and pull requests welcome!
 If you have access to Intel Xeon Phi and want to implement a MIC worker that would be excellent.
 
 
-# About the Author
-
-David Ison has been developing software since the 1980's.  In addition to C++, he programs web applications in PHP / LAMP Stack, and front end Javascript in React.js.  He has been a Linux enthusiast and web developer since 1998 and interested in HPC computing platforms since 2014.
 
 
 
