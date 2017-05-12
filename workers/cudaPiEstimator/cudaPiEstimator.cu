@@ -29,7 +29,6 @@ extern __cuda_fake_struct blockIdx;
 
 //#define DEBUG
 
-// This is a CUDA GN worker
 #define CUDA
 
 #include "cudaPiEstimator.hpp"
@@ -63,12 +62,7 @@ __global__ void piKernel(FLOAT *reduction_sums, FLOAT step, unsigned long num_si
 * Glue
 *
 */
-/*
-extern "C" bool HPCgearLaunch (const char * source_data, const unsigned int source_len,
-                               const char * host, ostringstream & results_stream) {
-    return HPCgearConnect<PiEstimatorWorker> (source_data, source_len, host, results_stream);
-}
-*/
+
 extern "C" bool HPCgearLaunch (HgTaskParams & task_params) {
     return HPCgearConnect<PiEstimatorWorker> (task_params);
 }
@@ -105,21 +99,13 @@ cout << "Send job received" << endl;
     bool is_error = false;
 
 
- /*   if (workerValues.num_sims < 0 || workerValues.seconds > 90) {
-        error_message << "seconds: " << workerValues.seconds << " Must be in range 1..90";
-        is_error = true;
-    }
-*/
 
-//    error_message <<  "This is a fake error -- but could have been a parameters error.";
 
 
     if (is_error) {
         SendError(error_message.str());
         throw std::runtime_error(error_message.str());
     } 
-
-  ////  SendError("Fake error at beginning");
 
 }
 
@@ -129,9 +115,7 @@ void PiEstimatorWorker::operator()(ptree & results_properties) {
     begin_time = microsec_clock::local_time();
 
     // Get device properties  TODO:  Move down
-  //  cudaError_t cudaResult = cudaSuccess;
     struct cudaDeviceProp     deviceProperties;
-//    cudaResult = cudaGetDeviceProperties(&deviceProperties, 0);
     cudaGetDeviceProperties(&deviceProperties, 0);
 
 
@@ -195,7 +179,6 @@ void PiEstimatorWorker::operator()(ptree & results_properties) {
         }
 
         SendPercentDone (1.0 - (static_cast<float>(sims_remaining) / workerValues.num_sims));
- //       cout << "sims_after_3 " << endl;
 
         sims_remaining -= sims_this_iteration;
         integration_offset += sims_this_iteration;
@@ -244,9 +227,4 @@ void PiEstimatorWorker::operator()(ptree & results_properties) {
 
 }
 
-/*
-    // See if single or double precision supported
-    if (deviceProperties.major < 1 || (deviceProperties.major == 1 && deviceProperties.minor < 3)) {
-        is_single = true;
-    }
-*/
+

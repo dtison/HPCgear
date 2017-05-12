@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../../include/hglaunch.hpp
+
+/home/me/devel/HPCgear/src/gearWorker.cpp
+cerrno
+-
+cstdio
+-
+cstdlib
+-
+cstring
+-
+iostream
+-
+signal.h
+-
+libgearman/gearman.h
+-
+boost/program_options.hpp
+-
+hglaunch.hpp
+-
+

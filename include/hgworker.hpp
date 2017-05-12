@@ -119,7 +119,6 @@ HgWorker::HgWorker(HgTaskParams & task_params) : context(0), send_socket(0), sen
     std::cout << "use_zmq is " << use_zmq << std::endl;
     if (use_zmq) {
 
-//        std::string port = source_properties.get<std::string>("port", "");
         port = source_properties.get<std::string>("port", "");
 
         //  ZMQ setup
@@ -128,29 +127,10 @@ HgWorker::HgWorker(HgTaskParams & task_params) : context(0), send_socket(0), sen
         std::string connect_str =
                 std::string("tcp://") + std::string(task_params.get_host()) + std::string(":") + port;
 
-        // TEMP WORKAROUND UNTIL gearman OFF quantum
-  ////////      connect_str = std::string("tcp://") + std::string("192.168.1.26") + std::string(":") + port2;
-
-
 
         std::cout << "Worker connecting to " << connect_str << std::endl;
         send_socket->connect(connect_str.c_str());
         std::cout << "Connecing done" << std::endl;
-
-        // DEBUGGING ONLY
-/*
-            int port_num  = boost::lexical_cast<int>(port);
-           port_num++;
-            std::cout << "lex casting port_num " << port_num << " to string" << std::endl;
-
-            std::string port2 = boost::lexical_cast<std::string>(port_num);
-
-        send_socket2 = new zmq::socket_t(*context, ZMQ_PUSH);
-//  26 will eventually be get_host()
-        connect_str = std::string("tcp://") + std::string("192.168.1.26") + std::string(":") + port2;
-            std::cout << "2nd socket " << connect_str << std::endl;
-            send_socket2->connect(connect_str.c_str());*/
-
 
 
     }
@@ -180,13 +160,6 @@ void HgWorker::SendPtree(boost::property_tree::ptree & ptree) {
         std::string message = string_stream.str();
 
         send_socket->send(&message[0], message.length());
-
-        // DEBUGGING ONLY
-        if (send_socket2) {
-            std::cout << "Sending a msg on socket2" << std::endl;
-            send_socket2->send(&message[0], message.length());
-        }
-        //    std::cout << "Sent  ptree " << message << std::endl;
     }
 }
 

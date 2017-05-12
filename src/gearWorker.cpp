@@ -56,77 +56,50 @@ static gearman_return_t gear_worker (gearman_job_st * job, void * context) {
     const char *workload = (const char *) gearman_job_workload(job);
     const size_t workload_size = gearman_job_workload_size(job);
 
-    //  Kludge fix for nodeJS workloads. Seems to not be null terminated
+    //  Workaround for nodeJS workloads. Seems they are not null terminated
     string workload_string(workload, workload_size);
-    //workload_string.resize(workload_size);
 
     if (options.verbose) {
         cout << "gearWorker Received " << workload_string << " " << workload_size << " bytes" << endl;
     }
-    cout << "gearWorker - worker dispatch.." <<  "host is " <<  options.host << endl;
+    cout << "gearWorker - worker dispatch.." << "host is " << options.host << endl;
 
-/*    string temp_string(workload);
-    string source_string = temp_string.substr(0, workload_size);
-    string job_handle(gearman_job_handle(job));
-
-    cout << "Workload is " << source_string << " Job handle " << job_handle << endl;*/
 
     ostringstream results_stream;
-//    HPCgearLaunch (&source_string[0], workload_size, &job_handle[0], results_stream);
- //   HPCgearLaunch (&source_string[0], workload_size, &options->host[0], results_stream);
-    HgTaskParams task_params (workload_string.c_str(), workload_size, gearman_job_handle(job), options.host.c_str(),
-                              &results_stream);
-/*
-    task_params.source_data     = workload;
-    task_params.source_len      = workload_size;
-    task_params.job_handle      = gearman_job_handle(job);
-    task_params.host            = options->host.c_str();
-    task_params.results_stream  = results_stream;*/
 
-    HPCgearLaunch (task_params);
+    HgTaskParams task_params(workload_string.c_str(), workload_size, gearman_job_handle(job), options.host.c_str(),
+                             &results_stream);
+
+    HPCgearLaunch(task_params);
 
 
     if (options.status) {
         // Notice that we send based on y divided by zero.
         cout << "Sending a STATUS" << endl;
-        if (gearman_failed(gearman_job_send_status(job, (uint32_t)0, (uint32_t)workload_size))) {
+        if (gearman_failed(gearman_job_send_status(job, (uint32_t) 0, (uint32_t) workload_size))) {
             return GEARMAN_ERROR;
         }
     }
 
-//    if (gearman_failed(gearman_job_send_data(job, &result[0], workload_size))) {
-    //  Send the results as a string
- //   string results = results_stream.str();
-   //     if (gearman_failed(gearman_job_send_data(job, &results[0], results.length()))) {
-          if (gearman_failed(gearman_job_send_data(job, results_stream.str().c_str(), results_stream.str().length()))) {
+    if (gearman_failed(gearman_job_send_data(job, results_stream.str().c_str(), results_stream.str().length()))) {
         return GEARMAN_ERROR;
     }
 
-/*    if (options.status) {
-        // Notice that we send based on y divided by zero.
-        if (gearman_failed(gearman_job_send_status(job, (uint32_t)workload_size, (uint32_t)workload_size))) {
-            return GEARMAN_ERROR;
-        }
-    }*/
 
     if (options.verbose) {
-       // cout << "Job=" << gearman_job_handle(job);
+        // cout << "Job=" << gearman_job_handle(job);
     }
     if (options.unique and options.verbose) {
         cout << "Unique=" << gearman_job_unique(job);
     }
     if (options.verbose) {
- /*       std::cout << "  Reversed=";
-        std::cout.write(results_stream, dest_size);
-        std::cout << std::endl;*/
-      //  cout << results_stream << endl;
+
+        cout << endl << "Returning SUCCESS.." << endl;
+
+        return GEARMAN_SUCCESS;
+
     }
-    cout << endl << "Returning SUCCESS.."  << endl;
-
-    return GEARMAN_SUCCESS;
-
 }
-
 
 int main(int args, char *argv[]) {
     uint64_t limit;
@@ -167,7 +140,6 @@ int main(int args, char *argv[]) {
     }
 
     //  Save a copy to the worker options  D. Ison 5-2015
- //   cout << "**Host coming in as " << host << endl;
     options.host = host;
 
 
@@ -205,7 +177,6 @@ int main(int args, char *argv[]) {
 
     gearman_function_t worker_fn = gearman_function_create(gear_worker);
 
-  //  if (gearman_failed(gearman_worker_define_function(worker, gearman_literal_param("cuda_sqrt"),
       if (gearman_failed(gearman_worker_define_function(worker,
               gearman_literal_param(STRINGIZE_VALUE_OF(WORKER_NAME)),
             worker_fn, 0, &options))) {

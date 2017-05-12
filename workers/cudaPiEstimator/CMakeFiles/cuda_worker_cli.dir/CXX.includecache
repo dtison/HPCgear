@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../../include/hglaunch.hpp
+
+/home/me/devel/HPCgear/src/workerConsoleUI.cpp
+cerrno
+-
+cstdio
+-
+cstdlib
+-
+cstring
+-
+iostream
+-
+signal.h
+-
+boost/program_options.hpp
+-
+hglaunch.hpp
+-
+
